@@ -2,6 +2,8 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getAnalytics, logEvent } from "firebase/analytics";
+import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -26,4 +28,11 @@ export function trackPageVisit() {
     page_path: window.location.pathname,
   });
 }
+export function usePageTracking() {
+    const location = useLocation();
+  
+    useEffect(() => {
+      trackPageVisit();
+    }, [location.pathname]);
+  }
 export { auth, analytics, db };
