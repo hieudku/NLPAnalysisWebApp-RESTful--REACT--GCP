@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
-import { getAnalytics } from 'firebase/analytics';
+import { getAnalytics, logEvent } from "firebase/analytics";
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -16,5 +16,14 @@ const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
 const firestore = getFirestore(app);
+const analytics = getAnalytics(app);
 
-export { auth };
+const db = getFirestore(app);
+
+export function trackPageVisit() {
+  logEvent(analytics, 'page_view', {
+    page_title: document.title,
+    page_path: window.location.pathname,
+  });
+}
+export { auth, analytics, db };
